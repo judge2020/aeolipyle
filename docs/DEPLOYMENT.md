@@ -1,11 +1,11 @@
 # Deployment verification
 
-Deployed on 2026-09-06.
+Deployed on 2026-09-06, including the amendment allowing spaces in counter names.
 
 - Public repository: https://github.com/judge2020/aeolipyle
 - Cloudflare account: Judge (`588bf4099b3f4afed2ac29958b07b7d3`)
 - Worker: `aeolipyle`
-- Version: `d14a5674-600a-4a53-962e-32e8b46abb35`
+- Version: `804487e3-6218-4d86-b6de-434f7389cfca`
 - Custom domain: https://aeolipyle.judge.sh
 - Discord application: `1546275044819345408` (currently named `SweetieAI` in Discord)
 - Interactions endpoint: https://aeolipyle.judge.sh/interactions
@@ -13,11 +13,11 @@ Deployed on 2026-09-06.
 ## Verified
 
 - `npm run typecheck` completed successfully.
-- `npm test`: 47 tests passed across five files, using real SQLite Durable Objects in workerd.
+- `npm test`: 52 tests passed across five files, using real SQLite Durable Objects in workerd.
 - `npm run register:dry` validated seven commands and 30 non-English locales per description.
 - `npm run deploy -- --dry-run` succeeded without `nodejs_compat`.
 - `npm run deploy` created both SQLite Durable Object namespaces and the custom domain.
-- Worker startup time reported by Cloudflare: 17 ms.
+- Worker startup time reported by Cloudflare: 12 ms.
 - Production `GET /healthz`: HTTP 200, `ok`.
 - Production `GET /`: HTTP 200 with the bot's identifying text.
 - Production unsigned and deliberately invalidly signed interactions: HTTP 401.
@@ -29,6 +29,10 @@ Deployed on 2026-09-06.
 - Discord install defaults are `applications.commands` and `bot`, with permissions `0`.
 - The GitHub repository is public. Local credentials, editor recovery files, dependencies,
   generated runtime declarations, and build output are ignored. `README.md` is unchanged.
+
+The [03 amendment](../prompts/03_ALLOW_SPACES_AMENDMENT.md) is deployed. Discord read-back
+confirmed updated descriptions on all seven name/new-name options, each with 30 translations.
+The original production version was `d14a5674-600a-4a53-962e-32e8b46abb35`.
 
 ## Remaining human verification
 
