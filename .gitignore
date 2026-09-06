@@ -1,0 +1,15 @@
+node_modules/
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env
+.env.*
+worker-configuration.d.ts
+dist/
+coverage/
+# Editor recovery files can contain local credentials.
+*.swp
+*.swo
+*.swx
+*~

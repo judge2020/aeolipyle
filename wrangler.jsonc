@@ -1,0 +1,47 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aeolipyle",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-06",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "aeolipyle.judge.sh",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "head_sampling_rate": 1
+    }
+  },
+  "vars": {
+    "DISCORD_APPLICATION_ID": "1546275044819345408",
+    "DISCORD_PUBLIC_KEY": "8175b3666037327ad203c2da5fdf9bbfe3d565965d84348d112106b21767a530"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "COUNTER_REGISTRY",
+        "class_name": "CounterRegistry"
+      },
+      {
+        "name": "COUNTER",
+        "class_name": "Counter"
+      }
+    ]
+  },
+  "exports": {
+    "CounterRegistry": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    },
+    "Counter": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  },
+  "account_id": "588bf4099b3f4afed2ac29958b07b7d3"
+}

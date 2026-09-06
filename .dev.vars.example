@@ -1,0 +1,2 @@
+# Only the registration script needs this. Never commit .dev.vars.
+DISCORD_BOT_TOKEN=paste-bot-token-here
