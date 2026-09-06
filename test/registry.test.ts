@@ -13,11 +13,11 @@ async function deleted(r: ReturnType<typeof fresh>) {
 }
 it("creates, preserves null descriptions, and rejects case-insensitive duplicates", async () => {
   const r = fresh();
-  expect((await r.create(input("Foo", null))).status).toBe("created");
-  expect((await r.create(input("foo"))).status).toBe("exists");
-  expect((await r.lookup("FOO"))?.description).toBeNull();
+  expect((await r.create(input("Foo Bar", null))).status).toBe("created");
+  expect((await r.create(input("foo bar"))).status).toBe("exists");
+  expect((await r.lookup("FOO BAR"))?.description).toBeNull();
   await evictDurableObject(r);
-  expect((await r.lookup("foo"))?.displayName).toBe("Foo");
+  expect((await r.lookup("foo bar"))?.displayName).toBe("Foo Bar");
 });
 it("claims exclusively, consumes all prompts, and applies restore metadata", async () => {
   const r = fresh(); const p = await deleted(r);

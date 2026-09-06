@@ -45,18 +45,18 @@ it("verifies signed PING and rejects absent, invalid, and modified signatures", 
 });
 it("runs all seven commands publicly or ephemerally as specified", async () => {
   const scope = crypto.randomUUID();
-  const created = await command(scope, "addcounter", { name: "Foo", description: "@everyone description" });
+  const created = await command(scope, "addcounter", { name: "Foo Bar", description: "@everyone description" });
   expect(created.data.flags).toBeUndefined(); expect(created.data.content).toContain("📝 @everyone description");
-  expect((await command(scope, "addcounter", { name: "foo" })).data.flags).toBe(MessageFlags.Ephemeral);
-  expect((await command(scope, "increment", { name: "FOO" })).data.content).toContain("**1**");
-  expect((await command(scope, "increment", { name: "foo" })).data.content).toContain("**2**");
-  expect((await command(scope, "decrement", { name: "foo" })).data.content).toContain("**1**");
-  expect((await command(scope, "counter", { name: "foo" })).data.content).toContain("📝 @everyone description");
-  expect((await command(scope, "renamecounter", { name: "foo", new_name: "Bar" })).data.content).toContain("**Foo** → **Bar**");
+  expect((await command(scope, "addcounter", { name: "foo bar" })).data.flags).toBe(MessageFlags.Ephemeral);
+  expect((await command(scope, "increment", { name: "FOO BAR" })).data.content).toContain("**1**");
+  expect((await command(scope, "increment", { name: "foo bar" })).data.content).toContain("**2**");
+  expect((await command(scope, "decrement", { name: "foo bar" })).data.content).toContain("**1**");
+  expect((await command(scope, "counter", { name: "foo bar" })).data.content).toContain("📝 @everyone description");
+  expect((await command(scope, "renamecounter", { name: "foo bar", new_name: "Baz Qux" })).data.content).toContain("**Foo Bar** → **Baz Qux**");
   const listed = await command(scope, "counters");
-  expect(listed.data.flags).toBe(MessageFlags.Ephemeral); expect(listed.data.embeds?.[0]?.description).toContain("**Bar** · 1");
-  expect((await command(scope, "removecounter", { name: "bar" })).data.content).toContain("it was at **1**");
-  expect((await command(scope, "counter", { name: "bar" })).data.flags).toBe(MessageFlags.Ephemeral);
+  expect(listed.data.flags).toBe(MessageFlags.Ephemeral); expect(listed.data.embeds?.[0]?.description).toContain("**Baz Qux** · 1");
+  expect((await command(scope, "removecounter", { name: "baz qux" })).data.content).toContain("it was at **1**");
+  expect((await command(scope, "counter", { name: "baz qux" })).data.flags).toBe(MessageFlags.Ephemeral);
   expect((await command(scope, "counters")).data.content).toBe(MSG.noCounters);
 });
 it("supports optional descriptions and isolates guilds and bot DM users", async () => {
@@ -73,7 +73,7 @@ it("supports optional descriptions and isolates guilds and bot DM users", async 
 it("returns validation and dispatch errors ephemerally", async () => {
   const scope = crypto.randomUUID();
   expect((await command(scope, "addcounter", { name: "bad_name" })).data.content).toBe(MSG.badName);
-  expect((await command(scope, "renamecounter", { name: "ok", new_name: "bad name" })).data.content).toBe(MSG.badName);
+  expect((await command(scope, "renamecounter", { name: "ok", new_name: "bad_name" })).data.content).toBe(MSG.badName);
   expect((await command(scope, "addcounter", { name: "Foo", description: "x".repeat(501) })).data.content).toBe(MSG.badDescription);
   expect((await command(scope, "unrecognized")).data.content).toBe(MSG.unknownCommand);
   expect((await send({ ...makeCommandInteraction("counter"), type: InteractionType.ApplicationCommandAutocomplete })).data.content).toBe(MSG.unsupported);
@@ -81,10 +81,10 @@ it("returns validation and dispatch errors ephemerally", async () => {
 });
 it.each(["keep", "zero"] as const)("restores with %s publicly and cleans the original prompt", async mode => {
   const scope = crypto.randomUUID();
-  await command(scope, "addcounter", { name: "Foo", description: "old" });
-  await command(scope, "increment", { name: "Foo" });
-  await command(scope, "removecounter", { name: "Foo" });
-  const prompt = await command(scope, "addcounter", { name: "FOO", description: "new" });
+  await command(scope, "addcounter", { name: "Foo Bar", description: "old" });
+  await command(scope, "increment", { name: "Foo Bar" });
+  await command(scope, "removecounter", { name: "Foo Bar" });
+  const prompt = await command(scope, "addcounter", { name: "FOO BAR", description: "new" });
   expect(prompt.data.flags).toBe(MessageFlags.Ephemeral); expect(buttons(prompt)).toHaveLength(3);
   const id = buttons(prompt)[mode === "zero" ? 0 : 1]!;
   const mock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
@@ -101,7 +101,7 @@ it.each(["keep", "zero"] as const)("restores with %s publicly and cleans the ori
   const body = JSON.parse(String(mock.mock.calls[0]?.[1]?.body)) as { allowed_mentions: unknown; components: unknown };
   expect(body.allowed_mentions).toEqual({ parse: [] }); expect(body.components).toEqual([]);
   mock.mockRestore();
-  expect((await command(scope, "counter", { name: "foo" })).data.content).toContain("📝 new");
+  expect((await command(scope, "counter", { name: "foo bar" })).data.content).toContain("📝 new");
 });
 it("cancels, rejects another user, and never resets from a stale sibling prompt", async () => {
   const scope = crypto.randomUUID();

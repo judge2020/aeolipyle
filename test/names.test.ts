@@ -1,9 +1,9 @@
 import { expect, it } from "vitest";
 import { validateCounterName } from "../src/lib/names";
 import { parseCustomId, restoreId, cancelId, pageId } from "../src/components/customId";
-it.each(["a", "Foo123", "a".repeat(100)])("accepts %s", name => expect(validateCounterName(name)).toEqual({ ok: true, display: name, key: name.toLowerCase() }));
-it.each(["", " ", "a".repeat(101), "a b", "a-b", "a_b", "é", "猫", "a\nb"])("rejects %s", name => expect(validateCounterName(name)).toEqual({ ok: false }));
-it("trims names without losing display casing", () => expect(validateCounterName(" Foo ")).toEqual({ ok: true, display: "Foo", key: "foo" }));
+it.each(["a", "Foo123", "a b", "Foo  Bar", "a".repeat(100), "A " + "b".repeat(98)])("accepts %s", name => expect(validateCounterName(name)).toEqual({ ok: true, display: name, key: name.toLowerCase() }));
+it.each(["", " ", "a".repeat(101), "a-b", "a_b", "é", "猫", "a\nb", "a\tb", "a\u00a0b", "A " + "b".repeat(99)])("rejects %s", name => expect(validateCounterName(name)).toEqual({ ok: false }));
+it("trims names without losing display casing", () => expect(validateCounterName(" Foo Bar ")).toEqual({ ok: true, display: "Foo Bar", key: "foo bar" }));
 it("round trips custom IDs within Discord's limit", () => {
   const token = crypto.randomUUID();
   expect(parseCustomId(restoreId("zero", token))).toEqual({ kind: "restore", mode: "zero", token });

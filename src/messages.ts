@@ -27,7 +27,7 @@ export const MSG = {
   decremented: (name: string, count: number) => `⬇️ **${name}** is now **${formatCount(count)}**`,
   noCounters: "📭 No counters here yet. Create one with `/addcounter`!",
   notFound: (name: string) => `❓ No counter named **${name}** here. Try \`/counters\`.`,
-  badName: "🚫 Counter names must be 1–100 letters or digits (A–Z, 0–9), no spaces or symbols.",
+  badName: "🚫 Counter names must be 1–100 characters: letters (A–Z), digits (0–9), and spaces.",
   badDescription: "🚫 Descriptions must be 1–500 characters.",
   unknownCommand: "🤷 I don't know that command.",
   staleButton: "🤷 That button is no longer wired to anything.",

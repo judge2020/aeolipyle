@@ -55,7 +55,9 @@ The user must share a server with the bot to use its DMs. Global command propaga
 | `/increment name` | Add one |
 | `/decrement name` | Subtract one, including below zero |
 
-Names contain 1–100 ASCII letters or digits and match without case sensitivity.
+Names contain 1–100 ASCII letters, digits, or spaces and match without case sensitivity.
+Leading and trailing whitespace is trimmed. Repeated internal spaces are preserved; tabs,
+line breaks, symbols, non-ASCII characters, and names containing only spaces are rejected.
 Descriptions are optional, at most 500 characters. Counts clamp to JavaScript's safe integer
 bounds. All messages suppress mentions, including mentions embedded in descriptions.
 
