@@ -1,5 +1,8 @@
 import type { LocalizedString, TranslatedLocale } from "./locales";
-// Columns: seven commands, counter name, optional description, replacement name.
+// One row per locale. Columns, by index:
+//   0 addcounter  1 removecounter  2 renamecounter  3 counter  4 counters  5 increment  6 decrement
+//   7 `name` option  8 `description` option  9 `new_name` option
+// Keep every cell ≤ 100 characters (Discord's limit; the validator enforces it).
 type TranslationRow = readonly [string, string, string, string, string, string, string, string, string, string];
 const rows = {
   en: ["Create a counter or restore a removed counter", "Remove a counter without losing its count", "Rename a counter", "Show a counter's count and description", "List the counters here", "Increase a counter by one", "Decrease a counter by one", "Counter name (letters, digits, and spaces)", "Optional description for the counter", "New counter name (letters, digits, and spaces)"],

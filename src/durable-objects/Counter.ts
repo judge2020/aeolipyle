@@ -1,5 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 
+/** One per counter, addressed by the UUID stored in the registry. Holds nothing but the count. */
 export class Counter extends DurableObject<Env> {
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
@@ -13,6 +14,7 @@ export class Counter extends DurableObject<Env> {
     `);
   }
 
+  /** Atomic ±1. Clamped to JavaScript's safe-integer range so the returned number is always exact. */
   adjust(delta: number): number {
     if (delta !== 1 && delta !== -1) throw new Error("Invalid counter delta");
     return this.ctx.storage.sql.exec<{ count: number }>(
